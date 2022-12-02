@@ -1,0 +1,21 @@
+{
+    "name": "nbwdigital/abcmedseg",
+    "description": "Integração do SOC com painel Bitrix AbcMedseg",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Nbwdigital\\Abcmedseg\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "NBW Digital"
+        }
+    ],
+    "require": {
+        "slim/slim": "4.*",
+        "slim/psr7": "^1.5",
+        "guzzlehttp/guzzle": "^7.4",
+        "symfony/finder": "^6.1"
+    }
+}
