@@ -14,12 +14,11 @@ trait DB
     function ExecCommand(string $query, array $DBConnection)
     {
         try {
-            $teste = "pgsql:host={$DBConnection['endereco']};port=5432;dbname={$DBConnection['banco']}";
-            $teste3 = $DBConnection['user'];
-            $teste4 =  $DBConnection['password'];
-            
             $pdo = new PDO("pgsql:host={$DBConnection['endereco']};port=5432;dbname={$DBConnection['banco']}", $DBConnection['user'], $DBConnection['password'], [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
             $data = $pdo->query($query)->fetch();
+
+            $data = $data || gettype($data) == "array" ? true : false;
+
             if ($data) {
                 return true;
             } else {
@@ -27,8 +26,19 @@ trait DB
             }
         } catch (PDOException $e) {
             $this->writeToLog($e->getMessage(), "URL - ERROR");
-            return $e->getMessage();
+            return false;
         }
     }
 
+    function ExecQuery(string $query, array $DBConnection)
+    {
+        try {
+            $pdo = new PDO("pgsql:host={$DBConnection['endereco']};port=5432;dbname={$DBConnection['banco']}", $DBConnection['user'], $DBConnection['password'], [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+            $data = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
+            return $data;
+        } catch (PDOException $e) {
+            $this->writeToLog($e->getMessage(), "URL - ERROR");
+            return $e->getMessage();
+        }
+    }
 }
