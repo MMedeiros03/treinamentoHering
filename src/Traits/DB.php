@@ -11,10 +11,15 @@ trait DB
 {
     use Utils;
 
-    function ExecCommand(string $query, array $DBConnection)
+    private $endereco = "localhost";
+    private $banco = "TreinamentoPHP";
+    private $user = "sa";
+    private $password = "23080903";
+
+    function ExecCommand(string $query)
     {
         try {
-            $pdo = new PDO("pgsql:host={$DBConnection['endereco']};port=5432;dbname={$DBConnection['banco']}", $DBConnection['user'], $DBConnection['password'], [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+            $pdo = new PDO("pgsql:host={$this->endereco};port=5432;dbname={$this->banco}", $this->user, $this->password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
             $data = $pdo->query($query)->fetch();
 
             $data = $data || gettype($data) == "array" ? true : false;
@@ -30,10 +35,10 @@ trait DB
         }
     }
 
-    function ExecQuery(string $query, array $DBConnection)
+    function ExecQuery(string $query)
     {
         try {
-            $pdo = new PDO("pgsql:host={$DBConnection['endereco']};port=5432;dbname={$DBConnection['banco']}", $DBConnection['user'], $DBConnection['password'], [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+            $pdo = new PDO("pgsql:host={$this->endereco};port=5432;dbname={$this->banco}", $this->user, $this->password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
             $data = $pdo->query($query)->fetchAll(PDO::FETCH_ASSOC);
             return $data;
         } catch (PDOException $e) {

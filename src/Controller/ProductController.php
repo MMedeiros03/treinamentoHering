@@ -4,39 +4,17 @@ namespace Nbwdigital\Abcmedseg\Controller;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Nbwdigital\Abcmedseg\Repository\UserRepository;
-use Nbwdigital\Abcmedseg\Repository\Authentication;
+use Nbwdigital\Abcmedseg\Repository\ProductRepository;
 
-class UserController
+class ProductController
 {
-    
-    public function Login(Request $request, Response $response, $args)
+
+    public function GetAllProducts(Request $request, Response $response, $args)
     {
-        $data = json_decode($request->getBody(), true);
 
-        $user = new UserRepository();
-        $authentication = new Authentication();
+        $product = new ProductRepository();
 
-        $result = $user->VerifyLogin($data);
-
-        if ($result) {
-
-            $token = [
-                "token" => $authentication->GenerateJWT($data)
-            ];
-            $response->getBody()->write(json_encode($token));
-            return $response;
-        } else {
-            $response->getBody()->write("usuario inexistente");
-            return $response;
-        }
-    }
-
-    public function GetAllUsers(Request $request, Response $response, $args)
-    {
-        $user = new UserRepository();
-
-        $result =  $user->GetAll();
+        $result =  $product->GetAll();
         $resultJson = json_encode($result);
         if ($result) {
             $response->getBody()->write($resultJson);
@@ -48,10 +26,11 @@ class UserController
         }
     }
 
-    public function GetUser(Request $request, Response $response, $args)
+    public function GetProduct(Request $request, Response $response, $args)
     {
-        $user = new UserRepository();
-        $result =  $user->GetById($args['id']);
+        $product = new ProductRepository();
+
+        $result =  $product->GetById($args['id']);
         $resultJson = json_encode($result);
         if ($result) {
             $response->getBody()->write($resultJson);
@@ -63,31 +42,31 @@ class UserController
         }
     }
 
-    public function DeleteUser(Request $request, Response $response, $args)
+    public function DeleteProduct(Request $request, Response $response, $args)
     {
         // $validateAuthentication = $this->GenerateJWT($request->getHeader());
-        $user = new UserRepository();
-        $result =  $user->Delete($args['id']);
+        $product = new ProductRepository();
+        $result = $product->Delete($args['id']);
         if ($result) {
             $response->getBody()->write("usuario deletado");
             return $response;
         } else {
-            $response->getBody()->write("usuario nÃ£o existe");
+            $response->getBody()->write("usuario não existe");
             return $response;
         }
     }
 
-    public function CreateUser(Request $request, Response $response, $args)
+    public function CreateProduct(Request $request, Response $response, $args)
     {
-        $user = new UserRepository();
         $data = json_decode($request->getBody(), true);
-        $result =  $user->Add($data);
+        $product = new ProductRepository();
+        $result =  $product->Add($data);
 
         if ($result) {
-            $response->getBody()->write("usuario criado");
+            $response->getBody()->write("produto criado");
             return $response;
         } else {
-            $response->getBody()->write("usuario nÃ£o cadastado");
+            $response->getBody()->write("produto não cadastado");
             return $response;
         }
     }
@@ -101,7 +80,7 @@ class UserController
     //         $response->getBody()->write(json_encode($result));
     //         return $response;
     //     } else {
-    //         $response->getBody()->write("usuario nÃ£o cadastado");
+    //         $response->getBody()->write("usuario não cadastado");
     //         return $response;
     //     }
     // }

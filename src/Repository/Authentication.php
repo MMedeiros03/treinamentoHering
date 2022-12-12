@@ -1,17 +1,17 @@
 <?php
 
-namespace Nbwdigital\Abcmedseg\Traits;
+namespace Nbwdigital\Abcmedseg\Repository;
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
-trait Authentication
+class Authentication
 {
-   
+
     public function GenerateJWT(array $data)
     {
 
-        $token_expire = strtotime("+8 hours"); 
+        $token_expire = strtotime("+8 hours");
 
         $key = '123456';
 
@@ -30,8 +30,4 @@ trait Authentication
 
         return $jwt;
     }
-
-    
-
-
 }
